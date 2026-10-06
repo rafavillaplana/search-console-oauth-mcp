@@ -1,0 +1,68 @@
+{
+  "manifest_version": "0.2",
+  "name": "search-console-oauth-mcp",
+  "display_name": "Google Search Console (OAuth)",
+  "version": "0.0.0",
+  "description": "Ask Claude about every Search Console property your Google account can see. Sign in once in your browser.",
+  "long_description": "Read-only connector for Google Search Console that signs in as you (OAuth 2.0 in your browser), so it reaches every property your Google account already has access to — no service account to add property by property.\n\nRuns entirely on your computer with your own Google Cloud OAuth client: Claude talks to the official Search Console API on your behalf and nothing goes through third-party servers. The refresh token is stored in a local file only you can read.\n\nIncludes site overview with period comparison, Search Analytics by query, page, country, device, date and search appearance with filters, time series, winners and losers between periods, URL Inspection and sitemaps.",
+  "author": {
+    "name": "Rafa Villaplana",
+    "url": "https://rafavillaplana.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafavillaplana/search-console-oauth-mcp"
+  },
+  "homepage": "https://github.com/rafavillaplana/search-console-oauth-mcp",
+  "support": "https://github.com/rafavillaplana/search-console-oauth-mcp/issues",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {
+        "GSC_OAUTH_CLIENT_ID": "${user_config.client_id}",
+        "GSC_OAUTH_CLIENT_SECRET": "${user_config.client_secret}"
+      }
+    }
+  },
+  "tools": [],
+  "keywords": [
+    "google",
+    "search console",
+    "seo",
+    "oauth",
+    "analytics"
+  ],
+  "license": "MIT",
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  },
+  "user_config": {
+    "client_id": {
+      "type": "string",
+      "title": "OAuth Client ID",
+      "description": "Google Cloud Console → APIs & Services → Credentials → OAuth client ID of type \"Desktop app\" (ends in .apps.googleusercontent.com). Enable the Google Search Console API in the same project.",
+      "sensitive": false,
+      "required": true
+    },
+    "client_secret": {
+      "type": "string",
+      "title": "OAuth Client secret",
+      "description": "The Client secret of that same Desktop app OAuth client (starts with GOCSPX-).",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}

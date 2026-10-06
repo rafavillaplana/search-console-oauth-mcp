@@ -1,0 +1,57 @@
+{
+  "name": "search-console-oauth-mcp",
+  "version": "1.0.0",
+  "description": "Local MCP server for Google Search Console with browser sign-in (OAuth 2.0): every property your Google account can see, no service account to add site by site.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rafa Villaplana (https://rafavillaplana.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafavillaplana/search-console-oauth-mcp.git"
+  },
+  "homepage": "https://github.com/rafavillaplana/search-console-oauth-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/rafavillaplana/search-console-oauth-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "claude",
+    "claude-desktop",
+    "google-search-console",
+    "search-console",
+    "oauth",
+    "seo"
+  ],
+  "bin": {
+    "search-console-oauth-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.es.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types \"test/**/*.test.ts\"",
+    "test:e2e": "npm run build && node test/e2e/run.mjs",
+    "pack": "npm run build && node scripts/pack-mcpb.mjs",
+    "auth": "npm run build && node dist/index.js auth",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "^2.1.2",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@types/node": "^22.20.4",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "zod": "^4.6.5"
+  }
+}
