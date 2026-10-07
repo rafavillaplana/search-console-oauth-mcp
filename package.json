@@ -1,6 +1,7 @@
 {
   "name": "search-console-oauth-mcp",
   "version": "1.0.0",
+  "private": true,
   "description": "Local MCP server for Google Search Console with browser sign-in (OAuth 2.0): every property your Google account can see, no service account to add site by site.",
   "type": "module",
   "license": "MIT",

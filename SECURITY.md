@@ -23,4 +23,4 @@ Out of scope: vulnerabilities in Google Search Console, Google's OAuth service, 
 - **Revocation.** `sign_out` revokes the refresh token at Google and deletes the file. A revoked or expired grant (`invalid_grant`) deletes the local file automatically.
 - Tokens are only sent to `oauth2.googleapis.com`, `www.googleapis.com` and `searchconsole.googleapis.com`.
 - `GSC_OAUTH_BASE` and `GSC_API_BASE` exist only for the test suite. Never set them in a real configuration: they would send your credentials to another host.
-- The released bundle is built by GitHub Actions from the tagged commit; the npm package is published with provenance.
+- The released bundle is built by GitHub Actions from the tagged commit and attached to the GitHub Release.

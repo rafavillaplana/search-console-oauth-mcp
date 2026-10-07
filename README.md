@@ -1,7 +1,6 @@
 # Google Search Console MCP (OAuth)
 
 [![CI](https://github.com/rafavillaplana/search-console-oauth-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/rafavillaplana/search-console-oauth-mcp/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/search-console-oauth-mcp.svg)](https://www.npmjs.com/package/search-console-oauth-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **English** · [Español](README.es.md)
@@ -46,16 +45,24 @@ You don't need Google's app verification to use it yourself (or with your team, 
 
 Claude Desktop runs extensions with its built-in Node.js, so there's nothing else to install.
 
-### Claude Desktop, manual config
+### From source (manual config or Claude Code)
 
-Requires [Node.js](https://nodejs.org) 20+. *Settings → Developer → Edit config*:
+Requires [Node.js](https://nodejs.org) 20+ and git:
+
+```bash
+git clone https://github.com/rafavillaplana/search-console-oauth-mcp.git
+cd search-console-oauth-mcp
+npm install        # installs and builds dist/index.js
+```
+
+**Claude Desktop:** *Settings → Developer → Edit config* (on Windows escape backslashes, e.g. `C:\\Users\\you\\search-console-oauth-mcp\\dist\\index.js`):
 
 ```json
 {
   "mcpServers": {
     "search-console": {
-      "command": "npx",
-      "args": ["-y", "search-console-oauth-mcp"],
+      "command": "node",
+      "args": ["/path/to/search-console-oauth-mcp/dist/index.js"],
       "env": {
         "GSC_OAUTH_CLIENT_ID": "your-id.apps.googleusercontent.com",
         "GSC_OAUTH_CLIENT_SECRET": "GOCSPX-..."
@@ -65,13 +72,13 @@ Requires [Node.js](https://nodejs.org) 20+. *Settings → Developer → Edit con
 }
 ```
 
-### Claude Code
+**Claude Code:**
 
 ```bash
 claude mcp add search-console --scope user \
   -e GSC_OAUTH_CLIENT_ID=your-id.apps.googleusercontent.com \
   -e GSC_OAUTH_CLIENT_SECRET=GOCSPX-... \
-  -- npx -y search-console-oauth-mcp
+  -- node /path/to/search-console-oauth-mcp/dist/index.js
 ```
 
 Instead of ID and secret you can point to the JSON file Google lets you download: `-e GSC_OAUTH_CLIENT_FILE=/path/client_secret_xxx.json`.
@@ -81,7 +88,7 @@ Instead of ID and secret you can point to the JSON file Google lets you download
 Ask Claude anything (e.g. *"list my Search Console properties"*). The first time, your browser opens Google's sign-in page: pick your account and **tick the Search Console permission**. You'll see *"Connected to Search Console ✔"* and Claude carries on with the answer.
 
 - If no browser opens, Claude gives you the link to open on the same computer.
-- From a terminal you can also run `npx search-console-oauth-mcp auth` (same environment variables).
+- If you installed from source, you can also sign in from a terminal with `node dist/index.js auth` (same environment variables).
 - To **switch Google accounts**, ask Claude to sign out (`sign_out`) and ask again.
 
 ## Tools

@@ -3,9 +3,9 @@
  * Google Search Console MCP server (stdio) with browser sign-in (OAuth 2.0).
  * Runs locally inside Claude Desktop, Claude Code or any MCP client that launches local servers.
  *
- *   GSC_OAUTH_CLIENT_ID=... GSC_OAUTH_CLIENT_SECRET=... npx -y search-console-oauth-mcp
- *   npx -y search-console-oauth-mcp auth      # sign in from a terminal
- *   npx -y search-console-oauth-mcp logout    # revoke and delete the saved token
+ *   GSC_OAUTH_CLIENT_ID=... GSC_OAUTH_CLIENT_SECRET=... node dist/index.js
+ *   node dist/index.js auth      # sign in from a terminal
+ *   node dist/index.js logout    # revoke and delete the saved token
  */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { GOOGLE_ENDPOINTS, OAuthManager, readClientFromEnv, type OAuthEndpoints } from "./auth";

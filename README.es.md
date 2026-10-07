@@ -1,7 +1,6 @@
 # Google Search Console MCP (OAuth)
 
 [![CI](https://github.com/rafavillaplana/search-console-oauth-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/rafavillaplana/search-console-oauth-mcp/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/search-console-oauth-mcp.svg)](https://www.npmjs.com/package/search-console-oauth-mcp)
 [![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue.svg)](LICENSE)
 
 [English](README.md) · **Español**
@@ -46,16 +45,24 @@ No hace falta verificar la app con Google para usarla tú (o tu equipo, hasta 10
 
 Claude Desktop ejecuta la extensión con su propio Node.js integrado, así que no tienes que instalar nada.
 
-### Claude Desktop, configuración manual
+### Desde el código (configuración manual o Claude Code)
 
-Necesitas [Node.js](https://nodejs.org) 20 o superior. *Configuración → Desarrollador → Editar configuración*:
+Necesitas [Node.js](https://nodejs.org) 20 o superior y git:
+
+```bash
+git clone https://github.com/rafavillaplana/search-console-oauth-mcp.git
+cd search-console-oauth-mcp
+npm install        # instala y genera dist/index.js
+```
+
+**Claude Desktop:** *Configuración → Desarrollador → Editar configuración* (en Windows usa `\\` en la ruta, p. ej. `C:\\Users\\tu\\search-console-oauth-mcp\\dist\\index.js`):
 
 ```json
 {
   "mcpServers": {
     "search-console": {
-      "command": "npx",
-      "args": ["-y", "search-console-oauth-mcp"],
+      "command": "node",
+      "args": ["/ruta/a/search-console-oauth-mcp/dist/index.js"],
       "env": {
         "GSC_OAUTH_CLIENT_ID": "tu-id.apps.googleusercontent.com",
         "GSC_OAUTH_CLIENT_SECRET": "GOCSPX-..."
@@ -65,13 +72,13 @@ Necesitas [Node.js](https://nodejs.org) 20 o superior. *Configuración → Desar
 }
 ```
 
-### Claude Code
+**Claude Code:**
 
 ```bash
 claude mcp add search-console --scope user \
   -e GSC_OAUTH_CLIENT_ID=tu-id.apps.googleusercontent.com \
   -e GSC_OAUTH_CLIENT_SECRET=GOCSPX-... \
-  -- npx -y search-console-oauth-mcp
+  -- node /ruta/a/search-console-oauth-mcp/dist/index.js
 ```
 
 En lugar del ID y el secreto puedes usar el JSON que descarga Google: `-e GSC_OAUTH_CLIENT_FILE=/ruta/client_secret_xxx.json`.
@@ -81,7 +88,7 @@ En lugar del ID y el secreto puedes usar el JSON que descarga Google: `-e GSC_OA
 Pregúntale cualquier cosa a Claude (por ejemplo, *"lista mis propiedades de Search Console"*). La primera vez se abre el navegador con la pantalla de Google: elige tu cuenta y **marca el permiso de Search Console**. Verás *"Connected to Search Console ✔"* y Claude seguirá con la respuesta.
 
 - Si el navegador no se abre, Claude te dará el enlace para abrirlo tú en el mismo ordenador.
-- Desde terminal también puedes iniciar sesión con `npx search-console-oauth-mcp auth` (con las mismas variables de entorno).
+- Si lo instalaste desde el código, también puedes iniciar sesión desde terminal con `node dist/index.js auth` (con las mismas variables de entorno).
 - Para **cambiar de cuenta de Google**, pídele a Claude que cierre la sesión (`sign_out`) y vuelve a preguntar.
 
 ## Herramientas
