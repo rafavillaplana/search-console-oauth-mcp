@@ -24,11 +24,12 @@ Servidor [MCP](https://modelcontextprotocol.io) local que permite a Claude consu
 1. Entra en [Google Cloud Console](https://console.cloud.google.com/) y crea un proyecto (por ejemplo, *Claude Search Console*).
 2. **Activa la API:** *APIs y servicios → Biblioteca →* busca **Google Search Console API** → *Habilitar*.
 3. **Pantalla de consentimiento** (*Google Auth Platform*):
-   - *Información de la marca:* nombre de la app (por ejemplo, *Claude GSC*) y tu correo de asistencia.
+   - *Información de la marca:* nombre de la app (por ejemplo, *Claude GSC*), tu correo de asistencia y, si Google los pide para publicar, la página principal y la política de privacidad de tu web, añadiendo tu dominio en *Dominios autorizados* (tiene que estar verificado en tu Search Console).
+     ⚠️ **No subas logotipo:** con logo Google exige verificar la app.
    - *Público:*
      - **Cuenta de Google Workspace y solo usuarios de tu organización →** elige **Interno**. Sin avisos y sin caducidad.
      - **Cuenta de Gmail o usuarios de fuera →** elige **Externo** y después pulsa **Publicar aplicación** para pasarla a **En producción**.
-       ⚠️ Si la dejas en *Prueba*, Google caduca el acceso **cada 7 días** y tendrás que volver a iniciar sesión.
+       ⚠️ Si la dejas en *Prueba*, al iniciar sesión verás *"Acceso bloqueado: … no ha completado el proceso de verificación de Google"* (salvo que te añadas como usuario de prueba), y aun así el acceso caduca **cada 7 días**.
    - *Acceso a datos (opcional):* añade el permiso `.../auth/webmasters.readonly`.
 4. **Crea el cliente:** *Clientes → Crear cliente →* Tipo de aplicación **App de escritorio** → *Crear*.
    Copia el **ID de cliente** (`….apps.googleusercontent.com`) y el **Secreto del cliente** (`GOCSPX-…`).
@@ -104,7 +105,8 @@ Por defecto los datos son de los **últimos 28 días completos** (Search Console
 - El token de renovación se guarda en `~/.search-console-oauth-mcp/token.json` (en Windows, `C:\Users\<tú>\.search-console-oauth-mcp\token.json`), con permisos solo para tu usuario. Puedes cambiar la ruta con `GSC_TOKEN_PATH`.
 - El inicio de sesión usa el flujo oficial de Google para apps de escritorio: redirección a `127.0.0.1` + PKCE. El enlace caduca a los 10 minutos y sirve una sola vez.
 - `sign_out` revoca el acceso en Google y borra el token. También puedes revocarlo en [myaccount.google.com/permissions](https://myaccount.google.com/permissions).
-- No compartas tu secreto de cliente ni el archivo de token. Más detalles en [SECURITY.md](SECURITY.md).
+- Publicar tu app OAuth (*En producción*) no expone tus datos: cada persona que inicie sesión solo autoriza acceso a **sus** propiedades. Quien descargue este proyecto crea su propio cliente OAuth; ni el código ni el `.mcpb` llevan credenciales.
+- No compartas tu secreto de cliente ni el archivo de token. Si el secreto se filtra, regéneralo en *Clientes* y actualízalo en la extensión. Más detalles en [SECURITY.md](SECURITY.md).
 
 ## Problemas frecuentes
 
@@ -114,6 +116,7 @@ Por defecto los datos son de los **últimos 28 días completos** (Search Console
 | *The saved Google sign-in has expired or was revoked* cada semana | La app está en modo *Prueba*: publícala (*En producción*) o usa *Interno* |
 | *has no access to this property* | Usa el `siteUrl` exacto de `list_sites` (`sc-domain:dominio.com` o `https://www.dominio.com/`) |
 | *Search Console permission was not granted* | Cierra sesión y vuelve a entrar marcando la casilla de Search Console |
+| *Acceso bloqueado … Error 403: access_denied* | La app está en *Prueba*: *Público → Publicar aplicación* |
 | *invalid_client* en el navegador | El ID o el secreto no coinciden, o el cliente no es de tipo *App de escritorio* |
 
 ## Desarrollo

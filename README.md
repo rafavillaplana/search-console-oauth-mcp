@@ -24,11 +24,12 @@ A local [MCP](https://modelcontextprotocol.io) server that lets Claude query **G
 1. Open [Google Cloud Console](https://console.cloud.google.com/) and create a project (e.g. *Claude Search Console*).
 2. **Enable the API:** *APIs & Services → Library →* search **Google Search Console API** → *Enable*.
 3. **Consent screen** (*Google Auth Platform*):
-   - *Branding:* app name (e.g. *Claude GSC*) and your support email.
+   - *Branding:* app name (e.g. *Claude GSC*), your support email and, if Google asks for them to publish, your website's home page and privacy policy, adding your domain under *Authorized domains* (it must be verified in your Search Console).
+     ⚠️ **Don't upload a logo:** with a logo Google requires app verification.
    - *Audience:*
      - **Google Workspace account, only people in your organization →** choose **Internal**. No warnings, no expiry.
      - **Gmail account or outside users →** choose **External**, then click **Publish app** to move it to **In production**.
-       ⚠️ If you leave it in *Testing*, Google expires the grant **every 7 days** and you'll have to sign in again.
+       ⚠️ If you leave it in *Testing*, sign-in shows *"Access blocked: … has not completed the Google verification process"* (unless you add yourself as a test user), and even then the grant expires **every 7 days**.
    - *Data access (optional):* add the `.../auth/webmasters.readonly` scope.
 4. **Create the client:** *Clients → Create client →* Application type **Desktop app** → *Create*.
    Copy the **Client ID** (`….apps.googleusercontent.com`) and the **Client secret** (`GOCSPX-…`).
@@ -104,7 +105,8 @@ By default data covers the **last 28 complete days** (Search Console lags ~2 day
 - The refresh token is stored at `~/.search-console-oauth-mcp/token.json` (Windows: `C:\Users\<you>\.search-console-oauth-mcp\token.json`) with owner-only permissions. Change it with `GSC_TOKEN_PATH`.
 - Sign-in uses Google's official installed-app flow: loopback redirect to `127.0.0.1` + PKCE. The link expires after 10 minutes and works once.
 - `sign_out` revokes access at Google and deletes the token. You can also revoke it at [myaccount.google.com/permissions](https://myaccount.google.com/permissions).
-- Don't share your client secret or token file. More in [SECURITY.md](SECURITY.md).
+- Publishing your OAuth app (*In production*) doesn't expose your data: whoever signs in only grants access to **their own** properties. People who download this project create their own OAuth client; neither the code nor the `.mcpb` contains credentials.
+- Don't share your client secret or token file. If the secret leaks, reset it under *Clients* and update it in the extension. More in [SECURITY.md](SECURITY.md).
 
 ## Troubleshooting
 
@@ -114,6 +116,7 @@ By default data covers the **last 28 complete days** (Search Console lags ~2 day
 | *The saved Google sign-in has expired or was revoked* every week | The app is in *Testing*: publish it (*In production*) or use *Internal* |
 | *has no access to this property* | Use the exact `siteUrl` from `list_sites` (`sc-domain:domain.com` or `https://www.domain.com/`) |
 | *Search Console permission was not granted* | Sign out and sign in again ticking the Search Console box |
+| *Access blocked … Error 403: access_denied* | The app is in *Testing*: *Audience → Publish app* |
 | *invalid_client* in the browser | Wrong ID/secret, or the client isn't a *Desktop app* |
 
 ## Development
